@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AuthService from "../services/AuthService";
 
 function Signup() {
     const [formData, setFormData] = useState({
         "tipo": "0"
     });
-
+    const navigate = useNavigate();
     const authService = new AuthService();
 
     const handleChange = (e) => {
@@ -16,20 +17,24 @@ function Signup() {
     };
 
     const handleSelectChange = (name, value) => {
-        console.log(name);
-        console.log(value);
         setFormData({
             ...formData,
             [name]: value
         });
-        console.log(formData);
     };
 
     const signup = async () => {
         try {
 
             let response = authService.signup(formData);
+            // TESTING
+            response = {
+                "status": 200
+            };
 
+            if (response.status == 200) {
+                navigate("/login")
+            }
 
         } catch (error) {
             console.error('Failed to signup', error);
@@ -37,8 +42,8 @@ function Signup() {
     }
 
 
-    return <div>
-        <div>
+    return <div className="flex align-items-center justify-content-center h-90-per">
+        <div className=" black-border">
             <div>
                 <h1>Cadastro</h1>
             </div>
