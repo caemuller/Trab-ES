@@ -1,14 +1,14 @@
 services:
   db:
-    image: mysql:latest
-    restart: always
+    image: postgres:alpine
     ports:
-      - "3306:3306"
+      - "5432:5432"
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-      MYSQL_DATABASE: 'voluntariese'
+      POSTGRES_DB: voluntariese
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
     volumes:
-      - database:/var/lib/mysql
+      - database:/var/lib/postgresql/data
 
   client:
     build:
@@ -20,6 +20,16 @@ services:
     ports:
       - "5173:5173"
     restart: unless-stopped
+
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: "."
+    depends_on:
+      - db
+    volumes:
+      - /app/node_modules
+      - .:/app
 
 volumes:
   database:
