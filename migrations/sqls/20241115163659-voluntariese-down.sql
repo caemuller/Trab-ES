@@ -1,6 +1,6 @@
 -- DROP TABLES
-DROP TABLE Enrollments;
-DROP TABLE VolunteerServices;
-DROP TABLE Campaigns;
-DROP TABLE Services;
-DROP TABLE Users;
+DROP TABLE IF EXISTS Enrollments;
+DROP TABLE IF EXISTS VolunteerServices;
+DROP TABLE IF EXISTS Campaigns;
+DROP TABLE IF EXISTS Services;
+DROP TABLE IF EXISTS Users;

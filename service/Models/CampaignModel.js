@@ -21,6 +21,17 @@ class CampaignModel {
         }
     }
 
+    static async create({name, description, creator_id, requested_service_id}){
+        try{
+            const query = `INSERT INTO Campaigns(name, description, creator_id, requested_service_id) VALUES ($1, $2, $3, $4)`
+            const values = [name, description, creator_id, requested_service_id]
+            const response = await dbClient.query(query, values)
+            return response
+        }catch(err){
+            throw new Error(`Failed to create campaign named ${name} in database: ${err}`)
+        }
+    }
+
     static async formatCampaignData(campaign){
         const campaignCreatorData = await UserModel.get(campaign.creator_id)
          return {
@@ -30,4 +41,6 @@ class CampaignModel {
     }
 }
 
+(async () => {
+})();
 module.exports = {CampaignModel};

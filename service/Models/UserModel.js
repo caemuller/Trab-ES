@@ -29,12 +29,14 @@ class UserModel {
             throw new Error(`Failed to create user named ${name} from database: ${err}`)
         }
     }
+
 }
 
-// const newUser = {name: "Rafa", gender:"male", birth_year: 2002, cpf:"12345678987"}
-// console.log((await UserModel.create(newUser)))
-// (async () => {
-//     console.log(await UserModel.get(1));
-// })();
+//  const newUser = {name: "Rafa", gender:"male", birth_year: 2002, cpf:"12345678987"};
+
+//  (async () => {
+//      console.log(await UserModel.getAll());
+//      //console.log((await UserModel.create(newUser)))
+//  })();
 
 module.exports = {UserModel};
