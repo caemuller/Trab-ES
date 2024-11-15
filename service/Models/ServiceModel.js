@@ -1,5 +1,4 @@
 const {dbClient} = require("../dbConnection.js");
-const {UserModel} = require("./UserModel.js");
 
 class ServiceModel {
     static async getAll(){
@@ -13,8 +12,10 @@ class ServiceModel {
 
     static async get(service_id){
         try{
-            const serviceData = (await dbClient.query(`select * from Services where service_id = ${service_id}`)).rows[0]
-            return serviceData
+            const query = 'select * from Services where service_id = $1';
+            const values = [service_id];
+            const serviceData = (await dbClient.query(query, values)).rows[0];
+            return serviceData;
         }catch(err){
             throw new Error(`Failed to fetch service with id=${service_id} from database: ${err}`)
         }
@@ -30,10 +31,22 @@ class ServiceModel {
             throw new Error(`Failed to create service ${service_name} in database: ${err}`)
         }
     }
+
+    static async getUserOfferedServices(user_id){
+        const query = `select service_id, service_name, service_description from Users join VolunteerServices
+                        on (Users.user_id = volunteerservices.volunteer_id)
+                        join Services using (service_id)
+                        where user_id = $1`
+        const query_params = [user_id];
+        const userOfferedServices = (await dbClient.query(query, query_params)).rows;
+
+        return userOfferedServices
+    }
 }
 
-// (async () => {
-//     console.log(await ServiceModel.getAll())
-    
-// })();
+(async () => {
+    //console.log(await ServiceModel.getUserOfferedServices(1))
+  
+})();
+
 module.exports = {ServiceModel};

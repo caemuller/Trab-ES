@@ -11,6 +11,7 @@
   "dependencies": {
     "db-migrate": "^0.11.14",
     "db-migrate-pg": "^1.5.2",
+    "express": "^4.21.1",
     "pg": "^8.13.1",
     "vite": "^5.4.11"
   }

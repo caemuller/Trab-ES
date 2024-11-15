@@ -1,10 +1,12 @@
 const { dbClient } = require("../dbConnection.js");
+const { ServiceModel } = require("./ServiceModel.js");
 
 class UserModel {
     static async getAll(){
         try{
-            const allUsers = await dbClient.query("select * from Users")
-            return allUsers.rows
+            const allUsers = (await dbClient.query("select * from Users")).rows
+            const formattedUsers = await Promise.all(allUsers.map(this.formatUserInformation));
+            return formattedUsers
         }catch(err){
             throw new Error(`Failed to fetch all users from database: ${err}`)
         }
@@ -30,12 +32,16 @@ class UserModel {
         }
     }
 
+    static async formatUserInformation(user){
+        const userOfferedServices = await ServiceModel.getUserOfferedServices(user.user_id)
+        const formattedUserInfo ={...user, offered_services: userOfferedServices}
+        return formattedUserInfo
+    }
+
 }
 
-//  const newUser = {name: "Rafa", gender:"male", birth_year: 2002, cpf:"12345678987"};
-
   (async () => {
-      console.log(await UserModel.getAll());
+     
   })();
 
 module.exports = {UserModel};
