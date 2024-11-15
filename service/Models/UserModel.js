@@ -1,4 +1,5 @@
 const { dbClient } = require("../dbConnection.js");
+const { CampaignModel } = require("./CampaignModel.js");
 const { ServiceModel } = require("./ServiceModel.js");
 
 class UserModel {
@@ -14,8 +15,9 @@ class UserModel {
 
     static async get(user_id){
         try{
-            const userData = await dbClient.query(`select * from Users where user_id = ${user_id}`)
-            return userData.rows[0]
+            const userData = (await dbClient.query(`select * from Users where user_id = ${user_id}`)).rows[0]
+            const formattedUserData = this.formatUserInformation(userData)
+            return  formattedUserData
         }catch(err){
             throw new Error(`Failed to fetch user with id=${user_id} from database: ${err}`)
         }
@@ -34,7 +36,8 @@ class UserModel {
 
     static async formatUserInformation(user){
         const userOfferedServices = await ServiceModel.getUserOfferedServices(user.user_id)
-        const formattedUserInfo ={...user, offered_services: userOfferedServices}
+        const userEnrolledCampaigns = await CampaignModel.getUserEnrolledCampaigns(user.user_id)
+        const formattedUserInfo ={...user, offered_services: userOfferedServices, enrolledCampaigns: userEnrolledCampaigns}
         return formattedUserInfo
     }
 

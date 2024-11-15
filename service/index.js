@@ -18,3 +18,9 @@ app.get("/users", async (req, res) => {
     res.status(200).send(usersData)
 })
 
+app.get("/users/:id", async (req, res) => {
+    const {id} = req.params
+    const userData = await UserModel.get(id)
+    res.status(200).send(userData)
+})
+
