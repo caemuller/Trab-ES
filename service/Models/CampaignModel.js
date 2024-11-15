@@ -1,8 +1,7 @@
+const {dbClient} = require("../dbConnection.js");
+const {UserModel} = require("./UserModel.js");
 
-import { dbClient } from "../dbConnection.js";
-import { UserModel } from "./UserModel.js";
-
-export class CampaignModel {
+class CampaignModel {
     static async getAll(){
         try{
             const allCampaigns = (await dbClient.query("select * from Campaigns")).rows
@@ -31,4 +30,4 @@ export class CampaignModel {
     }
 }
 
-console.log(await CampaignModel.get(1))
+module.exports = {CampaignModel};

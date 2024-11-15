@@ -1,6 +1,6 @@
-import { dbClient } from "../dbConnection.js";
+const { dbClient } = require("../dbConnection.js");
 
-export class UserModel {
+class UserModel {
     static async getAll(){
         try{
             const allUsers = await dbClient.query("select * from Users")
@@ -18,4 +18,23 @@ export class UserModel {
             throw new Error(`Failed to fetch user with id=${user_id} from database: ${err}`)
         }
     }
+
+    static async create({name, gender, birth_year, cpf}){
+        try{
+            const query = `INSERT INTO Users (name, gender, birth_year, cpf) VALUES ($1, $2, $3, $4)`
+            const values = [name, gender, birth_year, cpf]
+            const response = await dbClient.query(query, values)
+            return response
+        }catch(err){
+            throw new Error(`Failed to create user named ${name} from database: ${err}`)
+        }
+    }
 }
+
+// const newUser = {name: "Rafa", gender:"male", birth_year: 2002, cpf:"12345678987"}
+// console.log((await UserModel.create(newUser)))
+// (async () => {
+//     console.log(await UserModel.get(1));
+// })();
+
+module.exports = {UserModel};

@@ -1,5 +1,4 @@
-import pg from 'pg';
-const {Client} = pg
+const { Client } = require('pg');
 
 const client = new Client({
     host: "localhost",
@@ -9,4 +8,6 @@ const client = new Client({
     database: "voluntariese"
 })
 client.connect();
-export const dbClient = client 
+const dbClient = client 
+
+module.exports = {dbClient}
