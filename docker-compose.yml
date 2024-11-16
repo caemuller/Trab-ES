@@ -27,6 +27,10 @@ services:
     restart: unless-stopped
     command: >
       sh -c "rm -rf node_modules package-lock.json && npm install && npm run dev"
+    environment:
+      - WDS_SOCKET_HOST=127.0.0.1 
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true 
 
   api:
     build:

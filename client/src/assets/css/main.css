@@ -39,3 +39,10 @@ body {
     padding: 25px;
     border: black 1px solid;
 }
+
+.error-message {
+    margin-top: 10px;
+    color: red;
+    font-size: 14px;
+    font-weight: bold;
+}

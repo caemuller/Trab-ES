@@ -18,8 +18,9 @@ function CampaignList() {
     return <div>
         {campaigns.length > 0 ? (
         campaigns.map((camp) => (
-          <div>
+          <div key={camp.id}>
             <p>{camp.id} - {camp.title}</p>
+            <p>{camp.description}</p>
             <p>{camp.description}</p>
           </div>
         ))
