@@ -1,7 +1,7 @@
 export default class CampaignService {
     async list() {
         try {
-            const response = await fetch('http://localhost:8080/api/campaign-list');
+            const response = await fetch('http://localhost:8080/campaigns');
             if (!response.ok) {
               throw new Error('Network response was not ok');
             }
