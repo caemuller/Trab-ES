@@ -13,7 +13,7 @@ class UserModel {
         }
     }
 
-    static async get(user_id){
+    static async getById(user_id){
         try{
             const userData = (await dbClient.query(`select * from Users where user_id = ${user_id}`)).rows[0]
             const formattedUserData = this.formatUserInformation(userData)
@@ -23,10 +23,22 @@ class UserModel {
         }
     }
 
-    static async create({name, gender, birth_year, cpf}){
+    static async getPasswordByName(user_name){
         try{
-            const query = `INSERT INTO Users (name, gender, birth_year, cpf) VALUES ($1, $2, $3, $4)`
-            const values = [name, gender, birth_year, cpf]
+            const query = `select password from Users where name = $1`
+            const queryParams = [user_name]
+            const userData = (await dbClient.query(query, queryParams)).rows[0]
+            return  userData.password
+        }catch(err){
+            throw new Error(`Failed to fetch user ${user_name}'s password from database: ${err}`)
+        }
+    }
+
+    static async create({name, password, profile_description, gender, birth_year, cpf}){
+        try{
+            const query = "INSERT INTO Users (name, password, profile_description, gender, birth_year, cpf) VALUES ($1, $2,$3, $4, $5, $6)"
+            
+            const values = [name, password, profile_description, gender, birth_year, cpf]
             const response = await dbClient.query(query, values)
             return response
         }catch(err){
@@ -37,7 +49,12 @@ class UserModel {
     static async formatUserInformation(user){
         const userOfferedServices = await ServiceModel.getUserOfferedServices(user.user_id)
         const userEnrolledCampaigns = await CampaignModel.getUserEnrolledCampaigns(user.user_id)
-        const formattedUserInfo ={...user, offered_services: userOfferedServices, enrolledCampaigns: userEnrolledCampaigns}
+        const { password, ...userWithoutPassword } = user;
+        const formattedUserInfo = {
+            ...userWithoutPassword, 
+            offered_services: userOfferedServices, 
+            enrolledCampaigns: userEnrolledCampaigns,
+        }
         return formattedUserInfo
     }
 

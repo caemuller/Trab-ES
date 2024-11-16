@@ -17,16 +17,13 @@ function Login() {
     const login = async () => {
         try {
 
-            let response = authService.login(formData);
+            let response = await authService.login(formData);
             
-            // TESTING
-            response = {
-                "status": 200
-            }
-
             if (response.status == 200) {
                 navigate("/campaign-list");
-            } else {}
+            }else{
+                //MOSTRAR ALGUMA MENSAGEM DE LOGIN INVALIDO AO USUARIOS
+            }
 
         } catch (error) {
             console.error('Failed to login', error);
