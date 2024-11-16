@@ -10,17 +10,30 @@ app.listen(PORT, ()=>{
 
 
 app.get("/campaigns", async (req, res)=> {
-    const campaignsData = await CampaignModel.getAll()
-    res.status(200).send(campaignsData)
+    try{
+        const campaignsData = await CampaignModel.getAll()
+        res.status(200).send(campaignsData)
+    } catch (err) {
+        res.status(500).send({ error: `An error occurred while fetching campaigns data: ${err}` });
+    }
+    
 })
 app.get("/users", async (req, res) => {
-    const usersData = await UserModel.getAll()
-    res.status(200).send(usersData)
+    try {
+        const usersData = await UserModel.getAll()
+        res.status(200).send(usersData)
+    } catch (err) {
+        res.status(500).send({ error: `An error occurred while fetching users data: ${err}` });
+    }
 })
 
 app.get("/users/:id", async (req, res) => {
-    const {id} = req.params
-    const userData = await UserModel.get(id)
-    res.status(200).send(userData)
+    try {
+        const { id } = req.params;
+        const userData = await UserModel.get(id);
+        res.status(200).send(userData);
+    } catch (err) {
+        res.status(500).send({ error: `An error occurred while fetching user data: ${err}` });
+    }
 })
 
