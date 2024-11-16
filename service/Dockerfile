@@ -4,4 +4,4 @@ COPY package.json ./
 COPY package-lock.json ./
 COPY ./ ./
 RUN npm i
-CMD [ -d "node_modules" ] && node index.js
+CMD [ -d "node_modules" ] && npm run start:db

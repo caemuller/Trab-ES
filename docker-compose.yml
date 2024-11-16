@@ -9,6 +9,11 @@ services:
       POSTGRES_USER: postgres
     volumes:
       - database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   client:
     build:
@@ -30,11 +35,12 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - ./service:/app
     command: >
-      sh -c "rm -rf node_modules package-lock.json && npm install && npm run dev"
+      sh -c "rm -rf node_modules package-lock.json && npm install && npm run start:db && npm run dev"
 
 volumes:
   database:
