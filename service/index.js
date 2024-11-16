@@ -30,6 +30,16 @@ app.get("/users", async (req, res) => {
     }
 })
 
+app.post("/users", async (req,res)=> {
+    try {
+        const { name, password, profile_description, gender, birth_year, cpf } = req.body;
+        await UserModel.create({ name, password, profile_description, gender, birth_year, cpf });
+        res.status(201).send({ message: "User created successfully" });
+    } catch (err) {
+        res.status(500).send({ error: `An error occurred while creating the user: ${err}` });
+    }
+})
+
 app.get("/users/:id", async (req, res) => {
     try {
         const { id } = req.params;

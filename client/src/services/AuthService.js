@@ -21,12 +21,20 @@ export default class AuthService {
 
     async signup(params) {
         try {
-            const response = await fetch('http://localhost:8080/api/sign-up', {
+            console.log('SIGNING UP USER: '+ params)
+            const response = await fetch('http://localhost:8080/users', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(params),
+                body: JSON.stringify({
+                    name: params.username, 
+                    password: params.password, 
+                    profile_description: "", 
+                    gender: params.gender, 
+                    birth_year: params.birth_year, 
+                    cpf: params.cpf
+                }),
             });
             if (!response.ok) {
               throw new Error('Network response was not ok');

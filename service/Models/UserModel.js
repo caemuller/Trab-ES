@@ -34,10 +34,11 @@ class UserModel {
         }
     }
 
-    static async create({name, gender, birth_year, cpf}){
+    static async create({name, password, profile_description, gender, birth_year, cpf}){
         try{
-            const query = `INSERT INTO Users (name, gender, birth_year, cpf) VALUES ($1, $2, $3, $4)`
-            const values = [name, gender, birth_year, cpf]
+            const query = "INSERT INTO Users (name, password, profile_description, gender, birth_year, cpf) VALUES ($1, $2,$3, $4, $5, $6)"
+            
+            const values = [name, password, profile_description, gender, birth_year, cpf]
             const response = await dbClient.query(query, values)
             return response
         }catch(err){

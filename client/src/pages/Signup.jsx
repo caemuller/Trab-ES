@@ -3,8 +3,13 @@ import { useNavigate } from "react-router-dom";
 import AuthService from "../services/AuthService";
 
 function Signup() {
-    const [formData, setFormData] = useState({
-        "tipo": "0"
+    const [formData, setFormData] = useState({ //initial values
+        name: '',
+        password: '',
+        profile_description: '',
+        gender: 'male',
+        birth_year: '2006',
+        cpf: ''
     });
     const navigate = useNavigate();
     const authService = new AuthService();
@@ -16,12 +21,12 @@ function Signup() {
         });
     };
 
-    const handleSelectChange = (name, value) => {
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-    };
+     const handleSelectChange = (name, value) => {
+         setFormData({
+             ...formData,
+             [name]: value
+         });
+     };
 
     const signup = async () => {
         try {
@@ -59,19 +64,7 @@ function Signup() {
                     />
                 </div>
             </div>
-            <div>
-                <div>
-                    <p>Email:</p>
-                </div>
-                <div>
-                    <input 
-                        type="email"  
-                        name="email"
-                        onChange={handleChange}
-                    />
-                </div>
-            </div>
-            <div>
+            {/* <div>
                 <div>
                     <p>Tipo de cadastro:</p>
                 </div>
@@ -81,17 +74,43 @@ function Signup() {
                         <option value="1">Empresa</option>
                     </select>
                 </div>
-            </div>
+            </div> */}
+             <div>
+                <div>
+                    <p>Genero:</p>
+                </div>
+                <div>
+                    <select name="gender" onChange={(e) => handleSelectChange('gender', e.target.value)}>
+                        <option value="male">Homem</option>
+                        <option value="female">Mulher</option>
+                        <option value="other">Outro</option>
+                    </select>
+                </div>
+            </div> 
             <div>
                 <div>
-                    <p>CPF/CNPJ:</p>
+                    <p>CPF:</p>
                 </div>
                 <div>
                     <input 
                         type="text"  
-                        name="cpf_cnpj"
+                        name="cpf"
                         onChange={handleChange}
                     />
+                </div>
+            </div>
+            <div>
+                <div>
+                    <p>Ano de Nascimento:</p>
+                </div>
+                <div>
+                    
+                <select name="birth_year" onChange={(e) => handleSelectChange("birth_year", e.target.value)}>
+                    {Array.from({ length: 100 }, (_, i) => {
+                        const year = new Date().getFullYear() -18 - i;
+                        return <option key={year} value={year}>{year}</option>;
+                    })}
+                </select>
                 </div>
             </div>
             <div>
