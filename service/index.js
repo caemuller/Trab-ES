@@ -21,6 +21,17 @@ app.get("/campaigns", async (req, res)=> {
     }
     
 })
+app.get("/campaigns/:id", async (req, res)=> {
+    try{
+        const { id } = req.params;
+        const campaignData = await CampaignModel.get(id);
+        res.status(200).send(campaignData);
+    } catch (err) {
+        res.status(500).send({ error: `An error occurred while fetching campaign ${id}'s data: ${err}` });
+    }
+    
+})
+
 app.get("/users", async (req, res) => {
     try {
         const usersData = await UserModel.getAll()
