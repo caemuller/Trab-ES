@@ -16,7 +16,6 @@ services:
       dockerfile: Dockerfile
     working_dir: /usr/src/app
     volumes:
-      #      - ./client/node_modules:/usr/src/app/node_modules
       - ./client:/usr/src/app
     ports:
       - "5173:5173"
@@ -27,12 +26,15 @@ services:
   api:
     build:
       dockerfile: Dockerfile
-      context: "."
+      context: "./service"
+    ports:
+      - "8080:8080"
     depends_on:
       - db
     volumes:
-      - /app/node_modules
-      - .:/app
+      - ./service:/app
+    command: >
+      sh -c "rm -rf node_modules package-lock.json && npm install && npm run dev"
 
 volumes:
   database:

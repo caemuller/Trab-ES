@@ -2,7 +2,9 @@ const {CampaignModel} = require('./Models/CampaignModel')
 const { UserModel } = require('./Models/UserModel')
 const app = require('express')()
 const PORT = 8080
+const cors = require('cors');
 
+app.use(cors());
 
 app.listen(PORT, ()=>{
     console.log(`Server is running at http://localhost:${PORT} `)
