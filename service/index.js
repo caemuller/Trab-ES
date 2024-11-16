@@ -3,9 +3,10 @@ const { UserModel } = require('./Models/UserModel')
 const app = require('express')()
 const PORT = 8080
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 app.use(cors());
-
+app.use(bodyParser.json());
 app.listen(PORT, ()=>{
     console.log(`Server is running at http://localhost:${PORT} `)
 })
@@ -32,10 +33,25 @@ app.get("/users", async (req, res) => {
 app.get("/users/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const userData = await UserModel.get(id);
+        const userData = await UserModel.getById(id);
         res.status(200).send(userData);
     } catch (err) {
         res.status(500).send({ error: `An error occurred while fetching user data: ${err}` });
+    }
+})
+
+app.post("/user/login", async (req,res)=>{
+    try {
+        const { name, password } = req.body
+        const realPassword = await UserModel.getPasswordByName(name);
+        const authenticated = password == realPassword;
+        if (authenticated) {
+            res.status(200).send({ message: "Login successful",authenticated, ok: true });
+        } else {
+            res.status(401).send({ message: "Invalid credentials", authenticated, ok:false});
+        }
+    } catch (err) {
+        res.status(500).send({ error: `An error occurred during login: ${err}` });
     }
 })
 

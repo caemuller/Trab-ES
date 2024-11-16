@@ -13,13 +13,24 @@ class UserModel {
         }
     }
 
-    static async get(user_id){
+    static async getById(user_id){
         try{
             const userData = (await dbClient.query(`select * from Users where user_id = ${user_id}`)).rows[0]
             const formattedUserData = this.formatUserInformation(userData)
             return  formattedUserData
         }catch(err){
             throw new Error(`Failed to fetch user with id=${user_id} from database: ${err}`)
+        }
+    }
+
+    static async getPasswordByName(user_name){
+        try{
+            const query = `select password from Users where name = $1`
+            const queryParams = [user_name]
+            const userData = (await dbClient.query(query, queryParams)).rows[0]
+            return  userData.password
+        }catch(err){
+            throw new Error(`Failed to fetch user ${user_name}'s password from database: ${err}`)
         }
     }
 

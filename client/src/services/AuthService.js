@@ -2,17 +2,17 @@ export default class AuthService {
 
     async login(params) {
         try {
-            const response = await fetch('http://localhost:8080/api/login', {
+            const response = await fetch('http://localhost:8080/user/login', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(params),
+                body: JSON.stringify({name: params.username, password: params.password}),
             });
             if (!response.ok) {
               throw new Error('Network response was not ok');
             }
-            return await response.json();
+            return response;
 
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
