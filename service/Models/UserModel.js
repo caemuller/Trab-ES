@@ -37,7 +37,12 @@ class UserModel {
     static async formatUserInformation(user){
         const userOfferedServices = await ServiceModel.getUserOfferedServices(user.user_id)
         const userEnrolledCampaigns = await CampaignModel.getUserEnrolledCampaigns(user.user_id)
-        const formattedUserInfo ={...user, offered_services: userOfferedServices, enrolledCampaigns: userEnrolledCampaigns}
+        const { password, ...userWithoutPassword } = user;
+        const formattedUserInfo = {
+            ...userWithoutPassword, 
+            offered_services: userOfferedServices, 
+            enrolledCampaigns: userEnrolledCampaigns,
+        }
         return formattedUserInfo
     }
 
