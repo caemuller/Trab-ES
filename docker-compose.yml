@@ -24,12 +24,13 @@ services:
   api:
     build:
       dockerfile: Dockerfile
-      context: "."
+      context: "./service"
+    ports:
+      - "8080:8080"
     depends_on:
       - db
     volumes:
-      - /app/node_modules
-      - .:/app
+      - ./service:/app
 
 volumes:
   database:
