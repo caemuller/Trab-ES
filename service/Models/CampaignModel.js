@@ -4,8 +4,12 @@ const {dbClient} = require("../dbConnection.js");
 class CampaignModel {
     static async getAll(){
         try{
-            const allCampaigns = (await dbClient.query("select * from Campaigns")).rows
-            const formattedCampaigns = await Promise.all(allCampaigns.map((campaign) =>  this.formatCampaignData(campaign)));
+            const query = `SELECT  Campaigns.*, Services.service_name AS requested_service_name
+                            FROM Campaigns JOIN Services 
+                            ON Campaigns.requested_service_id = Services.service_id;`
+
+const allCampaigns = (await dbClient.query(query)).rows
+            const formattedCampaigns = await Promise.all(allCampaigns.map((campaign) => this.formatCampaignData(campaign)));
             return formattedCampaigns
         }catch(err){
             throw new Error(`Failed to fetch all campaigns from database: ${err}`)
@@ -14,17 +18,22 @@ class CampaignModel {
 
     static async get(campaign_id){
         try{
-            const campaignData = (await dbClient.query(`select * from Campaigns where campaign_id = ${campaign_id}`)).rows[0]
+            const query = `SELECT  Campaigns.*, Services.service_name AS requested_service_name
+            FROM Campaigns JOIN Services 
+            ON Campaigns.requested_service_id = Services.service_id
+            WHERE campaign_id = $1;`
+            const queryParams = [campaign_id]
+            const campaignData = (await dbClient.query(query, queryParams)).rows[0]
             return await this.formatCampaignData(campaignData)
         }catch(err){
             throw new Error(`Failed to fetch campaign with id=${campaign_id} from database: ${err}`)
         }
     }
 
-    static async create({name, description, creator_id, requested_service_id}){
+    static async create({name, description, creator_id, requested_service_id, city, subscription_limit_date, event_date}){
         try{
-            const query = `INSERT INTO Campaigns(name, description, creator_id, requested_service_id) VALUES ($1, $2, $3, $4)`
-            const values = [name, description, creator_id, requested_service_id]
+            const query = `INSERT INTO Campaigns(name, description, creator_id, requested_service_id, city, subscription_limit_date, event_date) VALUES ($1, $2, $3, $4, $5, $6, $7)`
+            const values = [name, description, creator_id, requested_service_id, city, subscription_limit_date, event_date]
             const response = await dbClient.query(query, values)
             return response
         }catch(err){
