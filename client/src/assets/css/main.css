@@ -52,7 +52,7 @@ body {
     flex-direction: column;
     gap: 16px;
     padding: 16px;
-  }
+}
   
 .card {
 border: 1px solid #ddd;
@@ -78,4 +78,16 @@ color: #999;
 font-size: 1.5rem;
 }
 
-  
+.search-bar {
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.search-input {
+width: 100%;
+max-width: 400px;
+padding: 8px 12px;
+border: 1px solid #ddd;
+border-radius: 4px;
+font-size: 1rem;
+}
