@@ -4,6 +4,7 @@ import AuthService from "../services/AuthService";
 
 function Login() {
     const [formData, setFormData] = useState({});
+    const [errorMessage, setErrorMessage] = useState(""); // Estado para armazenar mensagem de erro
     const authService = new AuthService();
     const navigate = useNavigate();
 
@@ -15,18 +16,21 @@ function Login() {
     };
 
     const login = async () => {
-        try {
+        setErrorMessage(""); 
 
-            let response = await authService.login(formData);
+        try {
+            
+            const response = await authService.login(formData);
             
             if (response.status == 200) {
-                navigate("/campaign-list");
-            }else{
-                //MOSTRAR ALGUMA MENSAGEM DE LOGIN INVALIDO AO USUARIOS
+                navigate("/home");
+            } else if (response.status == 401) {
+                setErrorMessage("Usuário ou senha inválidos");
             }
 
         } catch (error) {
-            console.error('Failed to login', error);
+            console.error("Erro ao fazer login:", error);
+            setErrorMessage("Erro de login. Por favor, tente novamente.");
         }
     }
 
@@ -60,6 +64,11 @@ function Login() {
                         />
                     </div>
                 </div>
+                {errorMessage && (
+                    <div className="error-message">
+                        <p style={{ color: "red" }}>{errorMessage}</p>
+                    </div>
+                )}
                 <div>
                     <p>Não tem uma conta? <a href="/sign-up">Registre-se</a></p>
                 </div>
