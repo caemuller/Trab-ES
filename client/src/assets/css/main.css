@@ -46,3 +46,36 @@ body {
     font-size: 14px;
     font-weight: bold;
 }
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+  }
+  
+.card {
+border: 1px solid #ddd;
+border-radius: 8px;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+padding: 16px;
+background-color: #f9f9f9;
+}
+  
+.card p {
+margin: 4px 0;
+}
+
+.card h3 {
+margin: 0 0 8px;
+font-size: 1.25rem;
+color: #333;
+}
+
+.no-data {
+text-align: center;
+color: #999;
+font-size: 1.5rem;
+}
+
+  

@@ -14,20 +14,25 @@ function CampaignList() {
   
         getCampaigns();
     }, []);
+    console.log(campaigns);
+    
 
-    return <div>
+    return (
+      <div className="container">
         {campaigns.length > 0 ? (
-        campaigns.map((camp) => (
-          <div key={camp.id}>
-            <p>{camp.id} - {camp.title}</p>
-            <p>{camp.description}</p>
-            <p>{camp.description}</p>
-          </div>
-        ))
-      ) : (
-        <h1>Nenhum dado encontrado.</h1>
-      )}
-    </div>
+          campaigns.map((camp) => (
+            <div className="card" key={camp.id}>
+              <h3>{camp.name}</h3>
+              <p><strong>Criador:</strong> {camp.creator.name}</p>
+              <p><strong>Serviço Requisitado:</strong> {camp.requested_service_id}</p>
+              <p><strong>Descrição:</strong> {camp.description}</p>
+            </div>
+          ))
+        ) : (
+          <h1 className="no-data">Nenhum dado encontrado.</h1>
+        )}
+      </div>
+    );
 
 }
 
