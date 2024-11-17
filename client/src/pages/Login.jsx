@@ -23,7 +23,7 @@ function Login() {
             const response = await authService.login(formData);
             
             if (response.status == 200) {
-                navigate("/campaign-list");
+                navigate("/home");
             } else if (response.status == 401) {
                 setErrorMessage("Usuário ou senha inválidos");
             }
@@ -64,7 +64,7 @@ function Login() {
                         />
                     </div>
                 </div>
-                {errorMessage && ( // Exibição da mensagem de erro, se houver
+                {errorMessage && (
                     <div className="error-message">
                         <p style={{ color: "red" }}>{errorMessage}</p>
                     </div>
