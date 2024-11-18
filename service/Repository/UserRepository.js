@@ -1,8 +1,8 @@
 const { dbClient } = require("../dbConnection.js");
-const { CampaignModel } = require("./CampaignModel.js");
-const { ServiceModel } = require("./ServiceModel.js");
+const { CampaignRepository } = require("./CampaignRepository.js");
+const { ServiceRepository } = require("./ServiceRepository.js");
 
-class UserModel {
+class UserRepository {
     static async getAll(){
         try{
             const allUsers = (await dbClient.query("select * from Users")).rows
@@ -47,8 +47,8 @@ class UserModel {
     }
 
     static async formatUserInformation(user){
-        const userOfferedServices = await ServiceModel.getUserOfferedServices(user.user_id)
-        const userEnrolledCampaigns = await CampaignModel.getUserEnrolledCampaigns(user.user_id)
+        const userOfferedServices = await ServiceRepository.getUserOfferedServices(user.user_id)
+        const userEnrolledCampaigns = await CampaignRepository.getUserEnrolledCampaigns(user.user_id)
         const { password, ...userWithoutPassword } = user;
         const formattedUserInfo = {
             ...userWithoutPassword, 
@@ -64,4 +64,4 @@ class UserModel {
      
   })();
 
-module.exports = {UserModel};
+module.exports = {UserRepository};
