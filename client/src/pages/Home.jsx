@@ -10,7 +10,9 @@ function Home() {
 
   return (
     <div className="home-container">
-      <h1>Bem-vindo ao Voluntarie.se</h1>
+    <div className="home-box">
+      <h1 className="home-title">Bem-vindo ao Voluntarie.se</h1>
+      
       <div className="home-buttons">
         <button onClick={goToCampaignList} className="home-button">
           Lista de Campanhas
@@ -23,6 +25,7 @@ function Home() {
         </button>
       </div>
     </div>
+  </div>
   );
 }
 

@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../services/AuthService";
+import '../assets/css/main.css'
 
 function Signup() {
-    const [formData, setFormData] = useState({ //initial values
+    const [formData, setFormData] = useState({ 
         name: '',
         password: '',
         profile_description: '',
@@ -32,7 +33,7 @@ function Signup() {
         try {
 
             let response = authService.signup(formData);
-            // TESTING
+ 
             response = {
                 "status": 200
             };
@@ -46,102 +47,122 @@ function Signup() {
         }
     }
 
+    const handleCpfChange = (e) => {
+        const value = e.target.value.replace(/[^0-9]/g, ''); 
 
-    return <div className="flex align-items-center justify-content-center h-90-per">
-        <div className=" black-border">
-            <div>
-                <h1>Cadastro</h1>
-            </div>
-            <div>
-                <div>
-                    <p>Usuário:</p>
-                </div>
-                <div>
-                    <input 
-                        type="text"  
-                        name="username"
-                        onChange={handleChange}
-                    />
-                </div>
-            </div>
-            {/* <div>
-                <div>
-                    <p>Tipo de cadastro:</p>
-                </div>
-                <div>
-                    <select name="tipo" onChange={(e) => handleSelectChange('tipo', e.target.value)}>
-                        <option value="0">Pessoa Física</option>
-                        <option value="1">Empresa</option>
-                    </select>
-                </div>
-            </div> */}
-             <div>
-                <div>
-                    <p>Genero:</p>
-                </div>
-                <div>
-                    <select name="gender" onChange={(e) => handleSelectChange('gender', e.target.value)}>
-                        <option value="male">Homem</option>
-                        <option value="female">Mulher</option>
-                        <option value="other">Outro</option>
-                    </select>
-                </div>
-            </div> 
-            <div>
-                <div>
-                    <p>CPF:</p>
-                </div>
-                <div>
-                    <input 
-                        type="text"  
-                        name="cpf"
-                        onChange={handleChange}
-                    />
-                </div>
-            </div>
-            <div>
-                <div>
-                    <p>Ano de Nascimento:</p>
-                </div>
-                <div>
-                    
-                <select name="birth_year" onChange={(e) => handleSelectChange("birth_year", e.target.value)}>
-                    {Array.from({ length: 100 }, (_, i) => {
-                        const year = new Date().getFullYear() -18 - i;
-                        return <option key={year} value={year}>{year}</option>;
-                    })}
-                </select>
-                </div>
-            </div>
-            <div>
-                <div>
-                    <p>Senha:</p>
-                </div>
-                <div>
-                    <input 
-                        type="password"  
-                        name="password"
-                        onChange={handleChange}
-                    />
-                </div>
-            </div>
-            <div>
-                <div>
-                    <p>Repita a senha:</p>
-                </div>
-                <div>
-                    <input 
-                        type="password"  
-                        name="repeated_password"
-                        onChange={handleChange}
-                    />
-                </div>
-            </div>
-            <div>
-                <button onClick={signup}>Registrar</button>
-            </div>
+        handleChange({
+            target: {
+                name: e.target.name,
+                value: value
+            }
+        });
+    };
+
+
+    return <div className="page-container">
+    <div className="form-container">
+        <h1>Cadastro</h1>
+
+        
+        <div className="form-group">
+            <label htmlFor="username">Usuário:</label>
+            <input
+                type="text"
+                id="username"
+                name="username"
+                onChange={handleChange}
+                placeholder="Digite seu nome de usuário"
+            />
+        </div>
+
+        
+        <div className="form-group">
+            <label htmlFor="gender">Gênero:</label>
+            <select
+        id="gender"
+        name="gender"
+        onChange={(e) => handleSelectChange('gender', e.target.value)}
+        defaultValue="" 
+    >
+        <option value="" disabled>Selecione o gênero</option> 
+        <option value="male">Homem</option>
+        <option value="female">Mulher</option>
+        <option value="other">Outro</option>
+    </select>
+        </div>
+
+        
+        <div className="form-group">
+            <label htmlFor="cpf">CPF:</label>
+            <input
+                type="text"
+                id="cpf"
+                name="cpf"
+                onChange={(e) => handleCpfChange(e)}  
+                placeholder="Digite seu CPF"
+    />
+        </div>
+
+        
+        <div className="form-group">
+            <label htmlFor="birth_year">Ano de Nascimento:</label>
+            <select
+        id="birth_year"
+        name="birth_year"
+        onChange={(e) => handleSelectChange("birth_year", e.target.value)}
+        defaultValue="" 
+    >
+        <option value="" disabled>Selecione o ano</option> 
+        {Array.from({ length: 100 }, (_, i) => {
+            const year = new Date().getFullYear() - 18 - i;
+            return (
+                <option key={year} value={year}>
+                    {year}
+                </option>
+            );
+        })}
+    </select>
+        </div>
+
+        <div className="form-group">
+            <label htmlFor="password">Senha:</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                onChange={handleChange}
+                placeholder="Digite sua senha"
+            />
+        </div>
+
+        <div className="form-group">
+            <label htmlFor="repeated_password">Repita a senha:</label>
+            <input
+                type="password"
+                id="repeated_password"
+                name="repeated_password"
+                onChange={handleChange}
+                placeholder="Repita sua senha"
+            />
+        </div>
+
+        
+        <div className="form-group accept">
+            <input
+                type="checkbox"
+                id="terms"
+            />
+            <label htmlFor="terms">Aceitar os</label>
+            <a href="#">termos de uso</a>
+        </div>
+
+        <div>
+            <button className="submit-button" onClick={signup}>
+                Registrar
+            </button>
         </div>
     </div>
+</div>
 }
 
 export default Signup;

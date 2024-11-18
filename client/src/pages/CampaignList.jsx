@@ -32,29 +32,32 @@ function CampaignList() {
 
     return (
       <div className="container">
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Buscar campanha pelo nome"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
-        </div>
-  
-        {filteredCampaigns.length > 0 ? (
-          filteredCampaigns.map((camp) => (
-            <div className="card" key={camp.id}>
-              <h3>{camp.name}</h3>
-              <p><strong>Criador:</strong> {camp.creator.name}</p>
-              <p><strong>Serviço Requisitado:</strong> {camp.requested_service_id}</p>
-              <p><strong>Descrição:</strong> {camp.description}</p>
-            </div>
-          ))
-        ) : (
-          <h1 className="no-data">Nenhuma campanha encontrada.</h1>
-        )}
+  <div className="search-bar">
+    <input
+      type="text"
+      placeholder="Buscar campanha pelo nome"
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="form-input"  // Utilizando a classe 'form-input' para estilizar o campo de busca
+    />
+  </div>
+
+  {filteredCampaigns.length > 0 ? (
+    filteredCampaigns.map((camp) => (
+      <div className="card" key={camp.id}>
+        <h3>{camp.name}</h3>
+        <p><strong>Criador:</strong> {camp.creator.name}</p>
+        <p><strong>Serviço Requisitado:</strong> {camp.requested_service_id}</p>
+        <p><strong>Data do evento:</strong> {camp.event_date}</p>
+        <p><strong>Descrição:</strong> {camp.description}</p>
+        <p><strong>Cidade:</strong> {camp.city}</p>
+        <p><strong>Data final de inscrição:</strong> {camp.subscription_limit_date}</p>
       </div>
+    ))
+  ) : (
+    <h1 className="no-data">Nenhuma campanha encontrada.</h1>
+  )}
+</div>
     );
 
 }

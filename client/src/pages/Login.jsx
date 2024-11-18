@@ -35,48 +35,48 @@ function Login() {
     }
 
 
-    return <div className="flex align-items-center justify-content-center h-90-per">
-            <div className=" black-border">
-                <div className="font-serif">
-                    <h1>Voluntarie.se</h1>
-                </div>
-                <div>
-                    <div>
-                        <p>Usuário:</p>
-                    </div>
-                    <div>
-                        <input 
-                            type="text"  
-                            name="username"
-                            onChange={handleChange}
-                        />
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <p>Senha:</p>
-                    </div>
-                    <div>
-                        <input 
-                            type="password"  
-                            name="password"
-                            onChange={handleChange}
-                        />
-                    </div>
-                </div>
-                {errorMessage && (
-                    <div className="error-message">
-                        <p style={{ color: "red" }}>{errorMessage}</p>
-                    </div>
-                )}
-                <div>
-                    <p>Não tem uma conta? <a href="/sign-up">Registre-se</a></p>
-                </div>
-                <div>
-                    <button onClick={login}>Login</button>
-                </div>
-            </div>
+    return <div className="page-container">
+    <div className="form-container">
+        <div className="font-serif">
+            <h1>Voluntarie.se</h1>
         </div>
+
+        <div className="form-group">
+            <label htmlFor="username">Usuário:</label>
+            <input 
+                type="text"  
+                id="username"
+                name="username"
+                onChange={handleChange}
+                placeholder="Digite seu usuário"
+                className="form-input"
+            />
+        </div>
+
+        <div className="form-group">
+            <label htmlFor="password">Senha:</label>
+            <input 
+                type="password"  
+                id="password"
+                name="password"
+                onChange={handleChange}
+                placeholder="Digite sua senha"
+                className="form-input"
+            />
+        </div>
+
+        {errorMessage && (
+            <div className="error-message">
+                <p>{errorMessage}</p>
+            </div>
+        )}
+
+        <div className="form-footer">
+            <p>Não tem uma conta? <a href="/sign-up">Registre-se</a></p>
+            <button onClick={login} className="submit-button">Login</button>
+        </div>
+    </div>
+</div>
 }
 
 export default Login;
