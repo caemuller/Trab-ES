@@ -1,6 +1,6 @@
 const {dbClient} = require("../dbConnection.js");
 
-class ServiceModel {
+class ServiceRepository {
     static async getAll(){
         try{
             const allServices = (await dbClient.query("select * from Services")).rows
@@ -45,8 +45,7 @@ class ServiceModel {
 }
 
 (async () => {
-    //console.log(await ServiceModel.getUserOfferedServices(1))
   
 })();
 
-module.exports = {ServiceModel};
+module.exports = {ServiceRepository};

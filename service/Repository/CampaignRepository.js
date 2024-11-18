@@ -1,7 +1,6 @@
 const {dbClient} = require("../dbConnection.js");
-//const {UserModel} = require("./UserModel.js");
 
-class CampaignModel {
+class CampaignRepository {
     static async getAll(){
         try{
             const query = `SELECT  Campaigns.*, Services.service_name AS requested_service_name
@@ -86,4 +85,4 @@ const allCampaigns = (await dbClient.query(query)).rows
    // console.log(await CampaignModel.getCampaignCreatorData(6))
     
 })();
-module.exports = {CampaignModel};
+module.exports = {CampaignRepository};

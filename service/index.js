@@ -1,5 +1,5 @@
-const {CampaignModel} = require('./Models/CampaignModel')
-const { UserModel } = require('./Models/UserModel')
+const {CampaignRepository} = require('./Repository/CampaignRepository')
+const { UserRepository } = require('./Repository/UserRepository')
 const app = require('express')()
 const PORT = 8080
 const cors = require('cors');
@@ -14,7 +14,7 @@ app.listen(PORT, ()=>{
 
 app.get("/campaigns", async (req, res)=> {
     try{
-        const campaignsData = await CampaignModel.getAll()
+        const campaignsData = await CampaignRepository.getAll()
         res.status(200).send(campaignsData)
     } catch (err) {
         res.status(500).send({ error: `An error occurred while fetching campaigns data: ${err}` });
@@ -24,7 +24,7 @@ app.get("/campaigns", async (req, res)=> {
 app.get("/campaigns/:id", async (req, res)=> {
     try{
         const { id } = req.params;
-        const campaignData = await CampaignModel.get(id);
+        const campaignData = await CampaignRepository.get(id);
         res.status(200).send(campaignData);
     } catch (err) {
         res.status(500).send({ error: `An error occurred while fetching campaign ${id}'s data: ${err}` });
@@ -34,7 +34,7 @@ app.get("/campaigns/:id", async (req, res)=> {
 
 app.get("/users", async (req, res) => {
     try {
-        const usersData = await UserModel.getAll()
+        const usersData = await UserRepository.getAll()
         res.status(200).send(usersData)
     } catch (err) {
         res.status(500).send({ error: `An error occurred while fetching users data: ${err}` });
@@ -44,7 +44,7 @@ app.get("/users", async (req, res) => {
 app.post("/users", async (req,res)=> {
     try {
         const { name, password, profile_description, gender, birth_year, cpf } = req.body;
-        await UserModel.create({ name, password, profile_description, gender, birth_year, cpf });
+        await UserRepository.create({ name, password, profile_description, gender, birth_year, cpf });
         res.status(201).send({ message: "User created successfully" });
     } catch (err) {
         res.status(500).send({ error: `An error occurred while creating the user: ${err}` });
@@ -54,7 +54,7 @@ app.post("/users", async (req,res)=> {
 app.get("/users/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const userData = await UserModel.getById(id);
+        const userData = await UserRepository.getById(id);
         res.status(200).send(userData);
     } catch (err) {
         res.status(500).send({ error: `An error occurred while fetching user data: ${err}` });
@@ -64,7 +64,7 @@ app.get("/users/:id", async (req, res) => {
 app.post("/user/login", async (req,res)=>{
     try {
         const { name, password } = req.body
-        const realPassword = await UserModel.getPasswordByName(name);
+        const realPassword = await UserRepository.getPasswordByName(name);
         const authenticated = password == realPassword;
         if (authenticated) {
             res.status(200).send({ message: "Login successful",authenticated, ok: true });
