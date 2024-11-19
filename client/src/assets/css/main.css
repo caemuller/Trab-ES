@@ -37,6 +37,14 @@ body {
     cursor: pointer;
 }
 
+.p-10-per {
+    padding-top: 10%;
+} 
+
+.m-bottom-320 {
+    margin-bottom: 320px;
+}
+
 .align-items-center {
     align-items: center;
 }

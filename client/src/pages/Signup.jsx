@@ -59,7 +59,7 @@ function Signup() {
     };
 
 
-    return <div className="page-container">
+    return <div className="page-container p-10-per m-bottom-320">
     <div className="form-container">
         <h1>Cadastro</h1>
 
