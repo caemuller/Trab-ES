@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../services/AuthService";
 import '../assets/css/main.css'
+import Notification from "./Notification";
+
 
 function Signup() {
     const [formData, setFormData] = useState({ 
@@ -14,6 +16,7 @@ function Signup() {
     });
     const navigate = useNavigate();
     const authService = new AuthService();
+    const [notification, setNotification] = useState({ message: '', isVisible: false });
 
     const handleChange = (e) => {
         setFormData({
@@ -22,15 +25,25 @@ function Signup() {
         });
     };
 
-     const handleSelectChange = (name, value) => {
-         setFormData({
-             ...formData,
-             [name]: value
-         });
-     };
+    const hideNotification = () => {
+        setNotification({ message: '', isVisible: false });
+    };
+
+    const handleSelectChange = (name, value) => {
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
 
     const signup = async () => {
         try {
+
+
+            // if (formData?.password.length == 0) {
+            //     setNotification({ message: 'Validation Error', isVisible: true });
+            //     throw new Error("Validation error");
+            // }
 
             let response = authService.signup(formData);
  
@@ -162,6 +175,11 @@ function Signup() {
             </button>
         </div>
     </div>
+    <Notification 
+        message={notification.message} 
+        isVisible={notification.isVisible} 
+        onClose={hideNotification} 
+    />
 </div>
 }
 

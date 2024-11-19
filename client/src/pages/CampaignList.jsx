@@ -23,12 +23,11 @@ function CampaignList() {
         setFilteredCampaigns(campaigns);
       } else {
         const filtered = campaigns.filter((camp) =>
-          camp.name.toLowerCase().includes(searchTerm.toLowerCase())
+          camp.name.toLowerCase().startsWith(searchTerm.toLowerCase())
         );
         setFilteredCampaigns(filtered);
       }
     }, [searchTerm, campaigns]);
-    
 
     return (
       <div className="container">
