@@ -52,6 +52,7 @@ function CampaignList() {
               <p><strong>Descrição:</strong> {camp.description}</p>
               <p><strong>Cidade:</strong> {camp.city}</p>
               <p><strong>Data final de inscrição:</strong> {camp.subscription_limit_date}</p>
+              <button className="submit-button">Inscrever-se</button>
             </div>
           ))
         ) : (
