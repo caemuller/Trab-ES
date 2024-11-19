@@ -1,5 +1,5 @@
 import {HelmetProvider, Helmet} from 'react-helmet-async';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import CampaignList from './pages/CampaignList';
@@ -22,6 +22,7 @@ function App() {
           <Route path="/campaign-list" element={<CampaignList />} />
           <Route path="/home" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>
     </HelmetProvider>
