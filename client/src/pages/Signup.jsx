@@ -12,8 +12,10 @@ function Signup() {
         profile_description: '',
         gender: 'male',
         birth_year: '2006',
-        cpf: ''
+        cpf: '',
+        accepted_terms: false
     });
+
     const navigate = useNavigate();
     const authService = new AuthService();
     const [notification, setNotification] = useState({ message: '', isVisible: false });
@@ -22,6 +24,13 @@ function Signup() {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
+        });
+    };
+
+    const handleCheckboxChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.checked
         });
     };
 
@@ -36,6 +45,85 @@ function Signup() {
         });
     };
 
+
+
+    const validateCpf = (cpf) => {
+        var value=true;
+        //edit cpf in case of 000.000.000-00
+        cpf = cpf.replace(/[^\d]+/g,'');
+        if(cpf == '') return false;
+        if (cpf.length !== 11) {
+            value=false;
+        }
+        return value;
+    };
+        // if (cpf.length !== 11) return false;
+        // let sum = 0;
+        // let remainder;
+        // for (let i = 1; i <= 9; i++) sum = sum + parseInt(cpf.substring(i - 1, i)) * (11 - i);
+        // remainder = (sum * 10) % 11;
+        // if (remainder === 10 || remainder === 11) remainder = 0;
+        // if (remainder !== parseInt(cpf.substring(9, 10))) return false;
+        // sum = 0;
+        // for (let i = 1; i <= 10; i++) sum = sum + parseInt(cpf.substring(i - 1, i)) * (12 - i);
+        // remainder = (sum * 10) % 11;
+        // if (remainder === 10 || remainder === 11) remainder = 0;
+        // if (remainder !== parseInt(cpf.substring(10, 11))) return false;
+        // return true;
+    // };
+    const handleSignupError = (message) => {
+        setNotification({ message, isVisible: true });
+    };
+
+    const validateForm = () => {
+        if (!formData.username) {
+            handleSignupError('Nome de usuário é obrigatório');
+            throw new Error('Validation error');
+        }
+        if (!validateCpf(formData.cpf)) {
+            handleSignupError('CPF inválido');
+            throw new Error('Validation error');
+        }
+        if (!validateBirthYear(formData.birth_year)) {
+            handleSignupError('Ano de nascimento inválido');
+            throw new Error('Validation error');
+        }
+        if (!validatePassword(formData.password)) {
+            handleSignupError('Senha deve ter pelo menos 8 caracteres');
+            throw new Error('Validation error');
+        }
+        if (formData.password !== formData.repeated_password) {
+            handleSignupError('Senhas não conferem');
+            throw new Error('Validation error');
+        }
+        if (!formData.accepted_terms) {
+            handleSignupError('Você deve aceitar os termos de uso');
+            throw new Error('Validation error');
+        }
+        return true;
+    };
+
+    const validateBirthYear = (birthYear) => {
+        const currentYear = new Date().getFullYear();
+        const age = currentYear - birthYear;
+        return age >= 18 && age <= 100;
+    };
+
+    const validatePassword = (password) => {
+        return password.length >= 8;
+    }
+
+    const validate_signup = 
+        formData?.username?.length === 0 || 
+        formData?.password?.length === 0 || 
+        formData?.cpf?.length === 0 || 
+        formData?.birth_year?.length === 0 ||
+        !validateCpf(formData.cpf) ||
+        !validateBirthYear(formData.birth_year) ||
+        !validatePassword(formData.password);
+
+
+
     const signup = async () => {
         try {
 
@@ -44,6 +132,8 @@ function Signup() {
             //     setNotification({ message: 'Validation Error', isVisible: true });
             //     throw new Error("Validation error");
             // }
+
+            validateForm();
 
             let response = authService.signup(formData);
  
@@ -163,14 +253,16 @@ function Signup() {
         <div className="form-group accept">
             <input
                 type="checkbox"
-                id="terms"
+                id="accepted_terms"
+                name="accepted_terms"
+                onChange={handleCheckboxChange}
             />
             <label htmlFor="terms">Aceitar os</label>
             <a href="#">termos de uso</a>
         </div>
 
         <div>
-            <button className="submit-button" onClick={signup}>
+            <button className="submit-button" onClick={signup}> 
                 Registrar
             </button>
         </div>
