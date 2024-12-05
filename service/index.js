@@ -4,6 +4,7 @@ const app = require('express')()
 const PORT = 8080
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const { ServiceRepository } = require('./Repository/ServiceRepository');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -12,7 +13,7 @@ app.listen(PORT, ()=>{
 })
 
 
-app.get("/campaigns", async (req, res)=> {
+app.get("/campaigns", async (req, res)=> { //get list of all campaigns
     try{
         const campaignsData = await CampaignRepository.getAll()
         res.status(200).send(campaignsData)
@@ -21,7 +22,7 @@ app.get("/campaigns", async (req, res)=> {
     }
     
 })
-app.get("/campaigns/:id", async (req, res)=> {
+app.get("/campaigns/:id", async (req, res)=> { // get specific campaign data
     try{
         const { id } = req.params;
         const campaignData = await CampaignRepository.get(id);
@@ -32,7 +33,27 @@ app.get("/campaigns/:id", async (req, res)=> {
     
 })
 
-app.get("/users", async (req, res) => {
+app.post("/campaigns", async (req,res)=>{ // create campaign
+    try {
+        const { name, description, creator_id, requested_service_id, city, subscription_limit_date, event_date } = req.body.campaign_data;
+        await CampaignRepository.create({ name, description, creator_id, requested_service_id, city, subscription_limit_date, event_date });
+        res.status(201).send({ message: "Campaign created successfully" });
+    } catch (err) {
+        res.status(500).send({ error: `An error occurred while creating the campaign: ${err}` });
+    }
+})
+
+app.post("/campaigns/enroll", async (req,res)=>{ // Enroll user in campaign
+    try {
+        const { user_id, campaign_id } = req.body;
+        await CampaignRepository.enrollUserInCampaign(campaign_id, user_id);
+        res.status(200).send({ message: "User enrolled successfully" });
+    } catch (err) {
+        res.status(500).send({ error: `An error occurred while enrolling user in campaign: ${err}` });
+    }
+})
+
+app.get("/users", async (req, res) => { // get list of all users
     try {
         const usersData = await UserRepository.getAll()
         res.status(200).send(usersData)
@@ -41,7 +62,7 @@ app.get("/users", async (req, res) => {
     }
 })
 
-app.post("/users", async (req,res)=> {
+app.post("/users", async (req,res)=> { // create user
     try {
         const { name, password, profile_description, gender, birth_year, cpf } = req.body;
         await UserRepository.create({ name, password, profile_description, gender, birth_year, cpf });
@@ -51,7 +72,7 @@ app.post("/users", async (req,res)=> {
     }
 })
 
-app.get("/users/:id", async (req, res) => {
+app.get("/users/:id", async (req, res) => { // get specific user data
     try {
         const { id } = req.params;
         const userData = await UserRepository.getById(id);
@@ -61,7 +82,7 @@ app.get("/users/:id", async (req, res) => {
     }
 })
 
-app.post("/user/login", async (req,res)=>{
+app.post("/user/login", async (req,res)=>{ // check user info for login
     try {
         const { name, password } = req.body
         const realPassword = await UserRepository.getPasswordByName(name);
@@ -73,6 +94,16 @@ app.post("/user/login", async (req,res)=>{
         }
     } catch (err) {
         res.status(500).send({ error: `An error occurred during login: ${err}` });
+    }
+})
+
+app.post("/user/services", async (req,res)=>{ //updates user services
+    try {
+        const { user_id, service_ids } = req.body;
+        await ServiceRepository.editUserServices(user_id, service_ids);
+        res.status(200).send({ message: "User services updated successfully" });
+    } catch (err) {
+        res.status(500).send({ error: `An error occurred while updating user services: ${err}` });
     }
 })
 
