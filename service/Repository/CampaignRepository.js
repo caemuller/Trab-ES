@@ -79,6 +79,19 @@ const allCampaigns = (await dbClient.query(query)).rows
             creator: campaignCreatorData
          }
     }
+
+    static async enrollUserInCampaign(campaign_id, volunteer_id){
+        try{
+            const query = `INSERT INTO enrollments(campaign_id, volunteer_id) VALUES ($1, $2)`
+            const query_params = [campaign_id, volunteer_id]
+            console.log(query,query_params)
+            const response = await dbClient.query(query, query_params)
+            console.log(response)
+            return response
+        }catch(err){
+            throw new Error(`Failed to enroll user with id=${volunteer_id} in campaign with id=${campaign_id} in database: ${err}`)
+        }
+    }
 }
 
 (async () => {

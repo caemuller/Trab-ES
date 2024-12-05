@@ -42,6 +42,21 @@ class ServiceRepository {
 
         return userOfferedServices
     }
+
+    static async editUserServices(user_id, service_ids){
+        let query = `delete from VolunteerServices where volunteer_id = $1`
+        let query_params = [user_id]
+        await dbClient.query(query, query_params)
+        
+        if(service_ids.length === 0){
+            return;
+        }
+        query = `insert into VolunteerServices (volunteer_id, service_id) values`;
+        const services_query_list = service_ids.map((service_id, index) => `($1, $${index + 2})`).join(',');
+        query += services_query_list;
+        query_params = [user_id, ...service_ids];
+        await dbClient.query(query, query_params);
+    }
 }
 
 (async () => {

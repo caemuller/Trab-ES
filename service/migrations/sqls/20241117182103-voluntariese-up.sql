@@ -52,6 +52,7 @@ CREATE TABLE Enrollments (
     volunteer_id BIGINT,
     FOREIGN KEY (volunteer_id) REFERENCES Users(user_id),
     FOREIGN KEY (campaign_id) REFERENCES Campaigns(campaign_id)
+    PRIMARY KEY (campaign_id, volunteer_id)
 );
 
 
