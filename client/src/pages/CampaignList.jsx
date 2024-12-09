@@ -28,7 +28,6 @@ function CampaignList() {
         setFilteredCampaigns(filtered);
       }
     }, [searchTerm, campaigns]);
-    
 
     return (
       <div className="container">
