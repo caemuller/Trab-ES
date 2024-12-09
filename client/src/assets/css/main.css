@@ -360,3 +360,7 @@ label {
   margin-bottom: 2rem;
   color: #333;
 }
+
+.content {
+    padding-top: 80px;
+}

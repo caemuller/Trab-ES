@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import CampaignService from "../services/CampaignService"
+import Menu from "./Menu";
 
 function CampaignList() {
     const [campaigns, setCampaigns] = useState([]);
@@ -30,35 +31,40 @@ function CampaignList() {
     }, [searchTerm, campaigns]);
 
     return (
-      <div className="container">
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Buscar campanha pelo nome"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="form-input"
-          />
+      <>
+      <Menu/>
+      <div className="content">
+        <div className="container">
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Buscar campanha pelo nome"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="form-input"
+            />
+          </div>
+          <div className="col g-15 cursor">
+          {filteredCampaigns.length > 0 ? (
+            filteredCampaigns.map((camp) => (
+              <div className="card" key={camp.id}>
+                <h3>{camp.name}</h3>
+                <p><strong>Criador:</strong> {camp.creator.name}</p>
+                <p><strong>Serviço Requisitado:</strong> {camp.requested_service_id}</p>
+                <p><strong>Data do evento:</strong> {camp.event_date}</p>
+                <p><strong>Descrição:</strong> {camp.description}</p>
+                <p><strong>Cidade:</strong> {camp.city}</p>
+                <p><strong>Data final de inscrição:</strong> {camp.subscription_limit_date}</p>
+                <button className="submit-button">Inscrever-se</button>
+              </div>
+            ))
+          ) : (
+            <h1 className="no-data">Nenhuma campanha encontrada.</h1>
+          )}
+          </div>
         </div>
-        <div className="col g-15 cursor">
-        {filteredCampaigns.length > 0 ? (
-          filteredCampaigns.map((camp) => (
-            <div className="card" key={camp.id}>
-              <h3>{camp.name}</h3>
-              <p><strong>Criador:</strong> {camp.creator.name}</p>
-              <p><strong>Serviço Requisitado:</strong> {camp.requested_service_id}</p>
-              <p><strong>Data do evento:</strong> {camp.event_date}</p>
-              <p><strong>Descrição:</strong> {camp.description}</p>
-              <p><strong>Cidade:</strong> {camp.city}</p>
-              <p><strong>Data final de inscrição:</strong> {camp.subscription_limit_date}</p>
-              <button className="submit-button">Inscrever-se</button>
-            </div>
-          ))
-        ) : (
-          <h1 className="no-data">Nenhuma campanha encontrada.</h1>
-        )}
-        </div>
-</div>
+      </div>
+    </>
     );
 
 }

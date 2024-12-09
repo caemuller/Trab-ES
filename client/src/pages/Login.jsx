@@ -23,7 +23,7 @@ function Login() {
             const response = await authService.login(formData);
             
             if (response.status == 200) {
-                navigate("/home");
+                navigate("/campaign-list");
             } else if (response.status == 401) {
                 setErrorMessage("Usuário ou senha inválidos");
             }
