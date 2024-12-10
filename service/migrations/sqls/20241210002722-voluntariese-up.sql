@@ -16,7 +16,8 @@ CREATE TABLE Users (
 	profile_description VARCHAR(255),
     gender VARCHAR(10) CHECK (gender IN ('male', 'female', 'other')),
     birth_year BIGINT,
-    cpf VARCHAR(255) UNIQUE
+    cpf VARCHAR(255) UNIQUE,
+    admin_user BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE Services (
@@ -34,6 +35,7 @@ CREATE TABLE Campaigns (
     city VARCHAR(255),
     subscription_limit_date DATE,
     event_date DATE,
+    aprovada BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (creator_id) REFERENCES Users(user_id),
     FOREIGN KEY (requested_service_id) REFERENCES Services(service_id)
 );
@@ -58,12 +60,13 @@ CREATE TABLE Enrollments (
 
 -- INSERTIONS
 
-INSERT INTO Users (name, password, profile_description, gender, birth_year, cpf) VALUES
-('Alice Santos', 'senha123', 'Adora voluntariado e organizar campanhas.', 'female', 1990, '12345678901'),
-('Carlos Oliveira', 'senhaSegura456', 'Apaixonado por projetos comunitários.', 'male', 1985, '98765432109'),
-('Joana Silva', 'joanaSenha789', NULL, 'female', 1995, '12312312345'),
-('Rafael Costa', 'rafaelSeguro99', 'Especialista em organizar workshops de tecnologia.', 'male', 1992, '45645645678'),
-('Sam Taylor', 'samOHelper01', 'Voluntário não-binário apaixonado por inclusão.', 'other', 1998, '78978978900');
+INSERT INTO Users (name, password, profile_description, gender, birth_year, cpf, admin_user) VALUES
+('Alice Santos', 'senha123', 'Adora voluntariado e organizar campanhas.', 'female', 1990, '12345678901', FALSE),
+('Carlos Oliveira', 'senhaSegura456', 'Apaixonado por projetos comunitários.', 'male', 1985, '98765432109', FALSE),
+('Joana Silva', 'joanaSenha789', NULL, 'female', 1995, '12312312345', FALSE),
+('Rafael Costa', 'rafaelSeguro99', 'Especialista em organizar workshops de tecnologia.', 'male', 1992, '45645645678', FALSE),
+('Sam Taylor', 'samOHelper01', 'Voluntário não-binário apaixonado por inclusão.', 'other', 1998, '78978978900', FALSE),
+('admin', 'superadmin', 'Gerenciador do sistema.', 'male', 1992, '74354883058', TRUE);
 
 
 INSERT INTO Services (service_name, service_description) VALUES

@@ -34,6 +34,18 @@ class UserRepository {
         }
     }
 
+    static async getUserByPasswordAndName(user_name, password){
+        try{
+            const query = `select * from Users where name = $1 and password = $2`
+            const queryParams = [user_name, password]
+            const userData = (await dbClient.query(query, queryParams)).rows[0]
+            return  userData;
+        }catch(err){
+            throw new Error(`Failed to fetch user ${user_name}'s password from database: ${err}`)
+        }
+    }
+
+
     static async create({name, password, profile_description, gender, birth_year, cpf}){
         try{
             const query = "INSERT INTO Users (name, password, profile_description, gender, birth_year, cpf) VALUES ($1, $2,$3, $4, $5, $6)"

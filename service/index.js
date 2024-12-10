@@ -85,12 +85,11 @@ app.get("/users/:id", async (req, res) => { // get specific user data
 app.post("/user/login", async (req,res)=>{ // check user info for login
     try {
         const { name, password } = req.body
-        const realPassword = await UserRepository.getPasswordByName(name);
-        const authenticated = password == realPassword;
-        if (authenticated) {
-            res.status(200).send({ message: "Login successful",authenticated, ok: true });
+        const user = await UserRepository.getUserByPasswordAndName(name, password);
+        if (user) {
+            res.status(200).send({ message: "Login successful", data: user, ok: true });
         } else {
-            res.status(401).send({ message: "Invalid credentials", authenticated, ok:false});
+            res.status(401).send({ message: "Invalid credentials", ok:false});
         }
     } catch (err) {
         res.status(500).send({ error: `An error occurred during login: ${err}` });

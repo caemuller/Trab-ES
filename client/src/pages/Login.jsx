@@ -22,9 +22,12 @@ function Login() {
             
             const response = await authService.login(formData);
             
-            if (response.status == 200) {
+            console.log(response);
+            if (response.ok) {
+                localStorage.setItem("authData", JSON.stringify(response.data));
+                console.log(localStorage.getItem("authData"));
                 navigate("/campaign-list");
-            } else if (response.status == 401) {
+            } else {
                 setErrorMessage("Usuário ou senha inválidos");
             }
 
