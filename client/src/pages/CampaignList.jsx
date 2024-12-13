@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import CampaignService from "../services/CampaignService"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Menu from "./Menu";
 import AuthService from "../services/AuthService";
+import { useNavigate } from "react-router-dom";
 
 function CampaignList() {
     const [campaigns, setCampaigns] = useState([]);
@@ -12,6 +13,7 @@ function CampaignList() {
     const [isAdmin, setIsAdmin] = useState(false);
     const campaignService = new CampaignService();
     const authService = new AuthService();
+    const navigate = useNavigate();
 
     const getCampaigns = async () => {
         const data = await campaignService.list();
@@ -58,7 +60,7 @@ function CampaignList() {
       <Menu/>
       <div className="content">
         <div className="container">
-          <div className="search-bar">
+          <div className="search-bar flex g-15">
             <input
               type="text"
               placeholder="Buscar campanha pelo nome"
@@ -66,6 +68,11 @@ function CampaignList() {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="form-input"
             />
+            <button className="approve-button" onClick={() => { navigate("/campaign-form") }}>
+              Adicionar
+              <FontAwesomeIcon icon={faPlus}/>
+            </button>
+
           </div>
           <div className="col g-15 cursor">
           {filteredCampaigns.length > 0 ? (

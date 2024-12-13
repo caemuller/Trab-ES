@@ -10,6 +10,7 @@ import UserPage from "./pages/UserPage";
 
 
 import './assets/css/main.css';
+import CampaignForm from './pages/CampaignForm';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/sign-up" element={<Signup />} />
           <Route path="/campaign-list" element={<CampaignList />} />
+          <Route path="/campaign-form" element={<CampaignForm />} />
           <Route path="/user-list" element={<UserList />} />
           <Route path="/edit-profile" element={<UserPage />} />
           <Route path="/profile" element={<Profile />} />
