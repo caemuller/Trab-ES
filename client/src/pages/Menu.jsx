@@ -14,7 +14,10 @@ function Menu() {
 
   const goToCampaignList = () => navigate("/campaign-list");
   const goToUserProfile = () => navigate("/profile");
-  const logout = () => navigate("/login");
+  const logout = () => {
+    localStorage.setItem("authData", null);
+    navigate("/login");
+  }
 
   return (
     <nav className="menu-container">
