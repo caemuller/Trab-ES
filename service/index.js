@@ -33,6 +33,28 @@ app.get("/campaigns/:id", async (req, res)=> { // get specific campaign data
     
 })
 
+app.delete("/campaigns/:id", async (req, res)=> {
+    try{
+        const { id } = req.params;
+        const campaignData = await CampaignRepository.delete(id);
+        res.status(200).send(campaignData);
+    } catch (err) {
+        res.status(500).send({ error: `An error occurred while fetching campaign ${id}'s data: ${err}` });
+    }
+    
+})
+
+app.put("/campaigns/:id", async (req, res)=> {
+    try{
+        const { id } = req.params;
+        const campaignData = await CampaignRepository.approve(id);
+        res.status(200).send(campaignData);
+    } catch (err) {
+        res.status(500).send({ error: `An error occurred while fetching campaign ${id}'s data: ${err}` });
+    }
+    
+})
+
 app.post("/campaigns", async (req,res)=>{ // create campaign
     try {
         const { name, description, creator_id, requested_service_id, city, subscription_limit_date, event_date } = req.body.campaign_data;
@@ -80,6 +102,17 @@ app.get("/users/:id", async (req, res) => { // get specific user data
     } catch (err) {
         res.status(500).send({ error: `An error occurred while fetching user data: ${err}` });
     }
+})
+
+app.delete("/users/:id", async (req, res)=> {
+    try{
+        const { id } = req.params;
+        const userData = await UserRepository.delete(id);
+        res.status(200).send(campaignData);
+    } catch (err) {
+        res.status(500).send({ error: `An error occurred while fetching campaign ${id}'s data: ${err}` });
+    }
+    
 })
 
 app.post("/user/login", async (req,res)=>{ // check user info for login

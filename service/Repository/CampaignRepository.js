@@ -92,6 +92,30 @@ const allCampaigns = (await dbClient.query(query)).rows
             throw new Error(`Failed to enroll user with id=${volunteer_id} in campaign with id=${campaign_id} in database: ${err}`)
         }
     }
+
+    static async delete(campaign_id){
+        try{
+            const query = `DELETE FROM campaigns WHERE campaign_id = $1`
+            const query_params = [campaign_id]
+            const response = await dbClient.query(query, query_params)
+            console.log(response)
+            return response
+        }catch(err){
+            throw new Error(`Failed to delete campaign with id=${campaign_id} in database: ${err}`)
+        }
+    }
+
+    static async approve(campaign_id){
+        try{
+            const query = `UPDATE campaigns SET aprovada = true WHERE campaign_id = $1`
+            const query_params = [campaign_id]
+            const response = await dbClient.query(query, query_params)
+            console.log(response)
+            return response
+        }catch(err){
+            throw new Error(`Failed to delete campaign with id=${campaign_id} in database: ${err}`)
+        }
+    }
 }
 
 (async () => {

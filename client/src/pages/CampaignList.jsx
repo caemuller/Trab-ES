@@ -1,22 +1,27 @@
 import { useEffect, useState } from "react";
 import CampaignService from "../services/CampaignService"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Menu from "./Menu";
+import AuthService from "../services/AuthService";
 
 function CampaignList() {
     const [campaigns, setCampaigns] = useState([]);
     const [filteredCampaigns, setFilteredCampaigns] = useState([]); // Lista filtrada
     const [searchTerm, setSearchTerm] = useState("");
+    const [isAdmin, setIsAdmin] = useState(false);
     const campaignService = new CampaignService();
+    const authService = new AuthService();
 
+    const getCampaigns = async () => {
+        const data = await campaignService.list();
+        setCampaigns(data || []); 
+        setFilteredCampaigns(data || []);
+    };
 
-    useEffect(() => {
-        const getCampaigns = async () => {
-            const data = await campaignService.list();
-            setCampaigns(data || []); 
-            setFilteredCampaigns(data || []);
-        };
-  
+    useEffect(() => {  
         getCampaigns();
+        setIsAdmin(authService.isAdmin());
     }, []);
 
     useEffect(() => {
@@ -29,6 +34,24 @@ function CampaignList() {
         setFilteredCampaigns(filtered);
       }
     }, [searchTerm, campaigns]);
+
+    const handleDelete = async (campaignId) => {
+      try {
+          await campaignService.delete(campaignId);
+          await getCampaigns();
+      } catch (error) {
+          console.error("Error deleting campaign:", error);
+      }
+    };
+
+    const handleApprove = async (campaignId) => {
+      try {
+          await campaignService.approve(campaignId);
+          await getCampaigns();
+      } catch (error) {
+          console.error("Error deleting campaign:", error);
+      }
+    };
 
     return (
       <>
@@ -47,8 +70,26 @@ function CampaignList() {
           <div className="col g-15 cursor">
           {filteredCampaigns.length > 0 ? (
             filteredCampaigns.map((camp) => (
-              <div className="card" key={camp.id}>
-                <h3>{camp.name}</h3>
+              <div className="card" key={camp.campaign_id}>
+                <div className="flex justify-content-space-between">
+                  <h3>{camp.name}</h3>
+                  {
+                    isAdmin ? 
+                    <div className="flex g-15">
+                      <button className="delete-button" onClick={() => { handleDelete(camp.campaign_id) }}>
+                        <FontAwesomeIcon icon={faTrash}/>
+                      </button>
+                      {
+                        !camp.aprovada ?
+                        <button className="approve-button" onClick={() => { handleApprove(camp.campaign_id) }}>
+                          <FontAwesomeIcon icon={faCheck}/>
+                        </button>
+                        : <></>
+                      }
+                    </div>
+                    : <></>
+                  }
+                </div>
                 <p><strong>Criador:</strong> {camp.creator.name}</p>
                 <p><strong>Serviço Requisitado:</strong> {camp.requested_service_id}</p>
                 <p><strong>Data do evento:</strong> {camp.event_date}</p>

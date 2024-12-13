@@ -45,4 +45,12 @@ export default class AuthService {
             console.error('There was a problem with the fetch operation:', error);
         }
     }
+
+    getUserInfo() {
+        return JSON.parse(localStorage.getItem("authData") ?? '{}');
+    }
+
+    isAdmin() {
+        return this.getUserInfo()?.admin_user;
+    }
 }

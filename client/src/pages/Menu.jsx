@@ -1,8 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import "../assets/css/menu.css";
+import AuthService from "../services/AuthService";
+import { useEffect, useState } from "react";
 
 function Menu() {
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
+  const authService = new AuthService();
+
+  useEffect(() => {
+    setIsAdmin(authService.isAdmin());
+  }, []);
 
   const goToCampaignList = () => navigate("/campaign-list");
   const goToUserProfile = () => navigate("/profile");
@@ -12,6 +20,13 @@ function Menu() {
     <nav className="menu-container">
       <div className="menu-logo">Voluntarie.se</div>
       <div className="menu-buttons">
+        {
+          isAdmin ? 
+          <button onClick={() => {navigate("/user-list")}} className="menu-button">
+            Lista de Usuários
+          </button>
+          : <></>
+        }
         <button onClick={goToCampaignList} className="menu-button">
           Lista de Campanhas
         </button>

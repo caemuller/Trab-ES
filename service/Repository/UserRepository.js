@@ -70,6 +70,17 @@ class UserRepository {
         return formattedUserInfo
     }
 
+    static async delete(user_id){
+        try{
+            const query = `DELETE FROM users WHERE user_id = $1`
+            const query_params = [user_id]
+            const response = await dbClient.query(query, query_params)
+            console.log(response)
+            return response
+        }catch(err){
+            throw new Error(`Failed to delete user with id=${user_id} in database: ${err}`)
+        }
+    }
 }
 
   (async () => {
