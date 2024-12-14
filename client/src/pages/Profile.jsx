@@ -1,31 +1,70 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Menu from "./Menu";
 
 function Profile() {
+  // Estado para armazenar as informações do usuário
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    profile_description: "",
+    gender: "",
+    birth_year: "",
+    offered_services: [],
+  });
+
+  // Estado para controlar o carregamento
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const authData = JSON.parse(localStorage.getItem("authData")); 
+    const userId = authData.user_id;
+
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/users/${userId}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+        const userData = await response.json();
+        setUser(userData);
+      } catch (error) {
+        console.error("Erro ao buscar dados do usuário:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   const handleChangeServices = () => {
     // LÓGICA DE ALTERAR SERVIÇOS
   };
 
+  if (loading) {
+    return <p>Carregando...</p>;
+  }
+
   return (
     <>
-      <Menu/>
+      <Menu />
       <div className="content">
         <div className="profile-container">
           <div className="profile-header">
-            <h1 className="profile-name">Nome do Usuário</h1>
-            <p className="profile-email">email@usuario.com</p>
+            <h1 className="profile-name">{user.name}</h1>
+            <p className="profile-email">{user.email}</p>
           </div>
           <div className="profile-body">
-            <h2>Informações Usuário</h2>
-            <p><strong>Nome:</strong> placeholder</p>
-            <p><strong>Descrição:</strong> placeholder </p>
-            <p><strong>Gênero:</strong> placeholder</p>
-            <p><strong>Ano de nascimento:</strong> placeholder</p>
-            <p><strong>Serviços:</strong> placeholder</p>
+            <h2>Informações do Usuário</h2>
+            <p><strong>Nome:</strong> {user.name}</p>
+            <p><strong>Descrição:</strong> {user.profile_description}</p>
+            <p><strong>Gênero:</strong> {user.gender}</p>
+            <p><strong>Ano de nascimento:</strong> {user.birth_year}</p>
+            <p><strong>Serviços:</strong> {user.offered_services.join(", ") || "Nenhum serviço cadastrado"}</p>
           </div>
 
-          {/* Button to navigate to the edit profile page */}
+          {/* Botão para editar o perfil */}
           <Link to="/edit-profile">
             <button className="profile-button">Editar Meu Perfil</button>
           </Link>

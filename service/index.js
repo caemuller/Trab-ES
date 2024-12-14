@@ -108,9 +108,9 @@ app.delete("/users/:id", async (req, res)=> {
     try{
         const { id } = req.params;
         const userData = await UserRepository.delete(id);
-        res.status(200).send(campaignData);
+        res.status(200).send(userData);
     } catch (err) {
-        res.status(500).send({ error: `An error occurred while fetching campaign ${id}'s data: ${err}` });
+        res.status(500).send({ error: `An error occurred while fetching user ${id}'s data: ${err}` });
     }
     
 })
@@ -128,14 +128,3 @@ app.post("/user/login", async (req,res)=>{ // check user info for login
         res.status(500).send({ error: `An error occurred during login: ${err}` });
     }
 })
-
-app.post("/user/services", async (req,res)=>{ //updates user services
-    try {
-        const { user_id, service_ids } = req.body;
-        await ServiceRepository.editUserServices(user_id, service_ids);
-        res.status(200).send({ message: "User services updated successfully" });
-    } catch (err) {
-        res.status(500).send({ error: `An error occurred while updating user services: ${err}` });
-    }
-})
-
