@@ -129,6 +129,17 @@ app.post("/user/login", async (req,res)=>{ // check user info for login
     }
 })
 
+app.post("/user/:id/services", async (req,res)=>{ //updates user services
+    try {
+        const { service_ids } = req.body;
+        const user_id = req.params.id;
+        await ServiceRepository.editUserServices(user_id, service_ids);
+        res.status(200).send({ message: "User services updated successfully" });
+    } catch (err) {
+        res.status(500).send({ error: `An error occurred while updating user services: ${err}` });
+    }
+})
+
 app.get('/services', async (req, res) => {
     try {
         const services = await ServiceRepository.getAllServices();
