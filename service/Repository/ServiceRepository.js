@@ -57,6 +57,12 @@ class ServiceRepository {
         query_params = [user_id, ...service_ids];
         await dbClient.query(query, query_params);
     }
+
+    static async getAllServices() {
+        const query = 'SELECT * FROM Services';
+        const result = await dbClient.query(query);
+        return result.rows;
+    }
 }
 
 (async () => {
