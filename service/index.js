@@ -104,6 +104,18 @@ app.get("/users/:id", async (req, res) => { // get specific user data
     }
 })
 
+app.post("/users/:id/services", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { services } = req.body; // Expecting an array of services
+        await UserRepository.addServicesToUser(id, services);
+        res.status(200).send({ message: "Services updated successfully" });
+    } catch (err) {
+        res.status(500).send({ error: `An error occurred while saving services: ${err}` });
+    }
+});
+
+
 app.delete("/users/:id", async (req, res)=> {
     try{
         const { id } = req.params;

@@ -60,6 +60,39 @@ function UserPage() {
     }
   };
 
+  const handleRemoveService = (service) => {
+    setAddedServices(addedServices.filter((s) => s !== service));
+  };
+
+  const handleSaveServices = async () => {
+    if (addedServices.length === 0) {
+        alert("Nenhum serviço para salvar.");
+        return;
+    }
+
+    try {
+        const userId = 123; // Replace with the actual user ID from context or props
+        const response = await fetch(`http://localhost:8080/users/${userId}/services`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ services: addedServices }),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            alert("Serviços salvos com sucesso!");
+        } else {
+            throw new Error("Falha ao salvar serviços.");
+        }
+    } catch (err) {
+        console.error(err);
+        alert("Erro ao salvar os serviços. Tente novamente.");
+    }
+};
+
+
   return (
     <div className="user-page-container">
       <h1>Editar Perfil</h1>
@@ -87,7 +120,7 @@ function UserPage() {
               ></textarea>
             </div>
             <div className="form-group">
-              <label htmlFor="gender">Gênero:</label>
+              <label htmlFor="gender">Género:</label>
               <select
                 id="gender"
                 name="gender"
@@ -144,15 +177,41 @@ function UserPage() {
           <div className="added-services">
             <h3>Serviços Adicionados:</h3>
             {addedServices.length > 0 ? (
-              <ul>
+                <ul>
                 {addedServices.map((service, index) => (
-                  <li key={index}>{service}</li>
+                    <li key={index} className="service-item">
+                    {service}
+                    <button
+                        className="remove-service-button"
+                        onClick={() => handleRemoveService(service)}
+                    >
+                        X
+                    </button>
+                    </li>
                 ))}
-              </ul>
+                </ul>
             ) : (
-              <p>Nenhum serviço adicionado ainda.</p>
+                <p>Nenhum serviço adicionado ainda.</p>
             )}
-          </div>
+            {/* Ensure the save button is easily visible */}
+            <button
+                className="save-services-button"
+                onClick={handleSaveServices}
+                style={{
+                display: "block",
+                marginTop: "10px",
+                padding: "10px 20px",
+                backgroundColor: "#007BFF",
+                color: "#fff",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                }}
+            >
+                Salvar Serviços
+            </button>
+            </div>
+
         </div>
       </div>
     </div>
