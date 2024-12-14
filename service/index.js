@@ -128,3 +128,12 @@ app.post("/user/login", async (req,res)=>{ // check user info for login
         res.status(500).send({ error: `An error occurred during login: ${err}` });
     }
 })
+
+app.get('/services', async (req, res) => {
+    try {
+        const services = await ServiceRepository.getAllServices();
+        res.json(services);
+    } catch (error) {
+        res.status(500).send({ error: "Error fetching services" });
+    }
+});
