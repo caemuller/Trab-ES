@@ -3,11 +3,13 @@ const {dbClient} = require("../dbConnection.js");
 class CampaignRepository {
     static async getAll(){
         try{
-            const query = `SELECT  Campaigns.*, Services.service_name AS requested_service_name
-                            FROM Campaigns JOIN Services 
-                            ON Campaigns.requested_service_id = Services.service_id;`
+            const query = `SELECT  Campaigns.*, Services.service_name AS requested_service_name, JSON_AGG(e.volunteer_id) as enrolled_users
+                            FROM Campaigns 
+                            JOIN Services ON Campaigns.requested_service_id = Services.service_id
+                            LEFT JOIN Enrollments as e ON e.campaign_id = Campaigns.campaign_id
+                            GROUP BY Campaigns.campaign_id, Services.service_name;`
 
-const allCampaigns = (await dbClient.query(query)).rows
+            const allCampaigns = (await dbClient.query(query)).rows
             const formattedCampaigns = await Promise.all(allCampaigns.map((campaign) => this.formatCampaignData(campaign)));
             return formattedCampaigns
         }catch(err){

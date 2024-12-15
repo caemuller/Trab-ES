@@ -25,7 +25,6 @@ function Login() {
             console.log(response);
             if (response.ok) {
                 localStorage.setItem("authData", JSON.stringify(response.data));
-                console.log(localStorage.getItem("authData"));
                 navigate("/campaign-list");
             } else {
                 setErrorMessage("Usuário ou senha inválidos");

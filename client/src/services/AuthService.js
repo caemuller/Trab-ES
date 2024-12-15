@@ -53,4 +53,8 @@ export default class AuthService {
     isAdmin() {
         return this.getUserInfo()?.admin_user;
     }
+
+    getUserId() {
+        return this.getUserInfo()?.user_id;
+    }
 }

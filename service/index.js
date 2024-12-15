@@ -1,5 +1,6 @@
 const {CampaignRepository} = require('./Repository/CampaignRepository')
 const { UserRepository } = require('./Repository/UserRepository')
+const { EnrollmentRepository } = require('./Repository/EnrollmentRepository')
 const app = require('express')()
 const PORT = 8080
 const cors = require('cors');
@@ -160,3 +161,23 @@ app.get('/services', async (req, res) => {
         res.status(500).send({ error: "Error fetching services" });
     }
 });
+
+app.post("/enrollment", async (req,res)=>{
+    try {
+        const { campaign_id, volunteer_id } = req.body;
+        await EnrollmentRepository.create(campaign_id, volunteer_id);
+        res.status(200).send({ message: "Enrollment created successfully" });
+    } catch (err) {
+        res.status(500).send({ error: `An error occurred while creating enrollment: ${err}` });
+    }
+})
+
+app.delete("/enrollment", async (req,res)=>{
+    try {
+        const { campaign_id, volunteer_id } = req.body;
+        await EnrollmentRepository.delete(campaign_id, volunteer_id);
+        res.status(200).send({ message: "Enrollment deleted successfully" });
+    } catch (err) {
+        res.status(500).send({ error: `An error occurred while deleting enrollment: ${err}` });
+    }
+})

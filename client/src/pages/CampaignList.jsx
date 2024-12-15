@@ -5,6 +5,7 @@ import { faCheck, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Menu from "./Menu";
 import AuthService from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
+import EnrollmentService from "../services/EnrollmentService";
 
 function CampaignList() {
     const [campaigns, setCampaigns] = useState([]);
@@ -12,6 +13,7 @@ function CampaignList() {
     const [searchTerm, setSearchTerm] = useState("");
     const [isAdmin, setIsAdmin] = useState(false);
     const campaignService = new CampaignService();
+    const enrollmentService = new EnrollmentService();
     const authService = new AuthService();
     const navigate = useNavigate();
 
@@ -22,6 +24,7 @@ function CampaignList() {
     };
 
     useEffect(() => {  
+      console.log(authService.getUserId());
         getCampaigns();
         setIsAdmin(authService.isAdmin());
     }, []);
@@ -54,6 +57,16 @@ function CampaignList() {
           console.error("Error deleting campaign:", error);
       }
     };
+
+    const enrollCampaign = async (campaignId) => {
+      enrollmentService.create(campaignId, authService.getUserId());
+      await getCampaigns();
+    }
+
+    const cancelEnrollment = async (campaignId) => {
+      enrollmentService.delete(campaignId, authService.getUserId());
+      await getCampaigns();
+    }
 
     return (
       <>
@@ -103,7 +116,12 @@ function CampaignList() {
                 <p><strong>Descrição:</strong> {camp.description}</p>
                 <p><strong>Cidade:</strong> {camp.city}</p>
                 <p><strong>Data final de inscrição:</strong> {camp.subscription_limit_date}</p>
-                <button className="submit-button">Inscrever-se</button>
+                {
+                  camp.enrolled_users.includes(parseInt(authService.getUserId())) ? 
+                  <button className="delete-button" onClick={() => {cancelEnrollment(camp.campaign_id)}}>Cancelar Inscrição</button>
+                  : <button className="submit-button" onClick={() => {enrollCampaign(camp.campaign_id)}}>Inscrever-se</button>
+                }
+                
               </div>
             ))
           ) : (
