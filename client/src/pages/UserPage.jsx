@@ -72,7 +72,7 @@ function UserPage() {
     }
 
     try {
-        const userId = 123; // Replace with the actual user ID from context or props
+        const userId = 0; 
         const response = await fetch(`http://localhost:8080/users/${userId}/services`, {
             method: "POST",
             headers: {
