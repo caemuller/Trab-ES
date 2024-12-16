@@ -57,4 +57,13 @@ export default class AuthService {
     getUserId() {
         return this.getUserInfo()?.user_id;
     }
+
+    getUserServices() {
+        let services = this.getUserInfo()?.services;
+        if (services.length && services[0] == null) {
+            return [];
+        }
+        
+        return this.getUserInfo()?.services;
+    }
 }

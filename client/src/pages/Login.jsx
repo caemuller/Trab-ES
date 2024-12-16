@@ -22,7 +22,6 @@ function Login() {
             
             const response = await authService.login(formData);
             
-            console.log(response);
             if (response.ok) {
                 localStorage.setItem("authData", JSON.stringify(response.data));
                 navigate("/campaign-list");

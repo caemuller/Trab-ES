@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Menu from "./Menu";
+import AuthService from "../services/AuthService";
+import ServicesService from "../services/ServicesService";
 
 function UserPage() {
   const [formData, setFormData] = useState({
@@ -11,6 +13,18 @@ function UserPage() {
 
   const [selectedService, setSelectedService] = useState("");
   const [addedServices, setAddedServices] = useState([]);
+  const authService = new AuthService();
+  const servicesService = new ServicesService();
+
+
+  const getServices = async () => {
+    var services = await servicesService.getUserServices(authService.getUserId()) ?? []
+    setAddedServices(services);
+  }
+
+  useEffect(() => {
+    getServices();
+  }, []);
 
   const availableServices = [
     "Cozinheiro",
@@ -72,7 +86,7 @@ function UserPage() {
     }
 
     try {
-        const userId = 123; // Replace with the actual user ID from context or props
+        const userId = authService.getUserId(); // Replace with the actual user ID from context or props
         const response = await fetch(`http://localhost:8080/users/${userId}/services`, {
             method: "POST",
             headers: {

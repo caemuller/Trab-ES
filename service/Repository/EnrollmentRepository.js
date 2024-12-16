@@ -19,7 +19,6 @@ class EnrollmentRepository {
             const query = `DELETE FROM Enrollments WHERE campaign_id = $1 AND volunteer_id = $2`
             const query_params = [campaign_id, volunteer_id]
             const response = await dbClient.query(query, query_params)
-            console.log(response)
             return response
         }catch(err){
             throw new Error(`Failed to delete enrollment with campaign_id=${campaign_id} and volunteer_id=${volunteer_id} in database: ${err}`)

@@ -61,17 +61,13 @@ function Profile() {
             <p><strong>Descrição:</strong> {user.profile_description}</p>
             <p><strong>Gênero:</strong> {user.gender}</p>
             <p><strong>Ano de nascimento:</strong> {user.birth_year}</p>
-            <p><strong>Serviços:</strong> {user.offered_services.join(", ") || "Nenhum serviço cadastrado"}</p>
+            <p><strong>Serviços:</strong> {user.offered_services.map(u => {return u.service_name}).join(", ") || "Nenhum serviço cadastrado"}</p>
           </div>
 
           {/* Botão para editar o perfil */}
           <Link to="/edit-profile">
             <button className="profile-button">Editar Meu Perfil</button>
           </Link>
-
-          <button className="profile-button" onClick={handleChangeServices}>
-            Alterar Meus Serviços
-          </button>
         </div>
       </div>
     </>

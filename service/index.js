@@ -153,6 +153,22 @@ app.post("/user/:id/services", async (req,res)=>{ //updates user services
     }
 })
 
+app.get("/users/:id/services", async (req, res) => {
+    try {
+        const user_id = req.params.id;
+        const data = await UserRepository.getServices(user_id);
+
+        if (data?.services.length && data?.services[0] == null) {
+            return res.status(200).send({ services: [] });
+        }
+
+        return res.status(200).send({ services: data.services });
+    } catch (err) {
+        res.status(500).send({ error: `An error occurred while getting user services: ${err}` });
+    }
+});
+
+
 app.get('/services', async (req, res) => {
     try {
         const services = await ServiceRepository.getAllServices();

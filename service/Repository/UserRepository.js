@@ -36,7 +36,12 @@ class UserRepository {
 
     static async getUserByPasswordAndName(user_name, password){
         try{
-            const query = `select * from Users where name = $1 and password = $2`
+            const query = `SELECT u.*, JSON_AGG(s.service_name) as services
+                            FROM Users as u 
+                            LEFT JOIN VolunteerServices AS vs ON vs.volunteer_id = u.user_id
+                            LEFT JOIN Services as s ON s.service_id = vs.service_id
+                            WHERE u.name = $1 and u.password = $2
+                            GROUP BY u.user_id`
             const queryParams = [user_name, password]
             const userData = (await dbClient.query(query, queryParams)).rows[0]
             return  userData;
@@ -44,7 +49,6 @@ class UserRepository {
             throw new Error(`Failed to fetch user ${user_name}'s password from database: ${err}`)
         }
     }
-
 
     static async create({name, password, profile_description, gender, birth_year, cpf}){
         try{
@@ -75,10 +79,44 @@ class UserRepository {
             const query = `DELETE FROM users WHERE user_id = $1`
             const query_params = [user_id]
             const response = await dbClient.query(query, query_params)
-            console.log(response)
             return response
         }catch(err){
             throw new Error(`Failed to delete user with id=${user_id} in database: ${err}`)
+        }
+    }
+
+    static async addServicesToUser(user_id, services){
+        try{
+            const deleteQuery = "DELETE FROM VolunteerServices WHERE volunteer_id = $1;"
+            const valuesDelete = [user_id]
+            await dbClient.query(deleteQuery, valuesDelete)
+
+            const query = `INSERT INTO VolunteerServices (volunteer_id, service_id)
+                            SELECT ${user_id} AS volunteer_id, s.service_id
+                            FROM Services AS s
+                            WHERE s.service_name in (${services.map(s => {return `'${s}'`;}).join(',')})
+                            `
+            const response = await dbClient.query(query)
+            return response
+        }catch(err){
+            throw new Error(`Failed to create user service: ${err}`)
+        }
+    }
+
+    static async getServices(user_id){
+        try{
+            const query = `SELECT JSON_AGG(s.service_name) as services
+                            FROM Users as u 
+                            LEFT JOIN VolunteerServices AS vs ON vs.volunteer_id = u.user_id
+                            LEFT JOIN Services as s ON s.service_id = vs.service_id
+                            WHERE u.user_id = $1
+                            GROUP BY u.user_id`
+
+            const query_params = [user_id]
+            const response = (await dbClient.query(query, query_params)).rows[0];
+            return response
+        }catch(err){
+            throw new Error(`Failed to create user service: ${err}`)
         }
     }
 }
