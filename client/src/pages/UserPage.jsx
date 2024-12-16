@@ -10,6 +10,37 @@ function UserPage() {
     gender: "male",
     birthYear: "",
   });
+  
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userId = authService.getUserId(); // Replace with actual user ID retrieval method
+        const response = await fetch(`http://localhost:8080/users/${userId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+  
+        if (response.ok) {
+          const userData = await response.json();
+          setFormData({
+            name: userData.name || "",
+            description: userData.description || "",
+            gender: userData.gender || "male",
+            birthYear: userData.birthYear || "",
+          });
+        } else {
+          console.error("Failed to fetch user data.");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+  
+    fetchUserData();
+  }, []);
+  
 
   const [selectedService, setSelectedService] = useState("");
   const [addedServices, setAddedServices] = useState([]);

@@ -66,7 +66,7 @@ function CampaignForm() {
 
     return (
         <div>
-          <Menu/>
+          <Menu />
           <div className="content"> 
             <div className="page-container p-10-per m-bottom-320">
                 <div className="form-container">
