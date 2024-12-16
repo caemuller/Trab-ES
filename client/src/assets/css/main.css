@@ -424,3 +424,23 @@ label {
     transform: scale(1.05);
 }
   
+.form-label {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+
+  }
+
+.form-textarea {
+    width: 350px;
+    padding: 1rem;
+    font-size: 1rem;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    resize: vertical; 
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    min-height: 150px; 
+    font-family: 'Arial', sans-serif;
+  }
+
